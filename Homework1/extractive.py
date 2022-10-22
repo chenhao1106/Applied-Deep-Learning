@@ -24,6 +24,7 @@ def main(args):
     model = ExtractiveModel(embeddings)
     model.load_state_dict(torch.load('./extractive-model.pt', map_location=device))
     model.to(device)
+    model.eval()
 
     with open(args.output_file, 'w') as f:
         for batch in tqdm(loader):
