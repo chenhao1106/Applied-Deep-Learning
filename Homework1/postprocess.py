@@ -70,7 +70,7 @@ def load_dataloader(dataset_path, batch_size=1, shuffle=False,
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--output-file', type=Path, default='./output.jsonl')
+    parser.add_argument('--output-file', type=Path, default='./extractive-output.jsonl')
 
     parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--num-workers', type=int, default=4)

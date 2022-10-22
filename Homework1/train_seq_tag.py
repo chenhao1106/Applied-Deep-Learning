@@ -61,8 +61,8 @@ def load_dataloader(dataset_path, batch_size=1, shuffle=False,
 def train(model, loader, optimizer, criterion, device):
     model.train()
     train_loss = 0.
-    for data in tqdm(loader):
-        x, y = data['text'].to(device), data['label'].type(torch.float).to(device)
+    for batch in tqdm(loader):
+        x, y = batch['text'].to(device), batch['label'].type(torch.float).to(device)
         out = model(x)
         
         loss = criterion(out, y)
@@ -83,8 +83,8 @@ def valid(model, loader, criterion, device):
     model.eval()
     valid_loss = 0.
     with torch.no_grad():
-        for data in tqdm(loader):
-            x, y = data['text'].to(device), data['label'].type(torch.float).to(device)
+        for batch in tqdm(loader):
+            x, y = batch['text'].to(device), batch['label'].type(torch.float).to(device)
             out = model(x)
             
             loss = criterion(out, y)
