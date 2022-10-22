@@ -1,0 +1,3 @@
+spacy==3.4.2
+-i https://download.pytorch.org/whl/cu113
+torch=1.12.0
