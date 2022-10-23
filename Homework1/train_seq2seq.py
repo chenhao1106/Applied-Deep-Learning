@@ -28,12 +28,12 @@ def main(args):
         embeddings = pickle.load(f)
 
     # Set up model, optimizer and training criterion.
-    model = Seq2SeqModel(embeddings).to(device)
+    model = Seq2SeqModel(embeddings, use_attention=args.use_attention).to(device)
     optimizer = torch.optim.Adam(model.parameters(), args.lr)    
     criterion = nn.CrossEntropyLoss(ignore_index=0).to(device)
 
     # Tensorboard writer
-    writer = SummaryWriter(log_dir='./run/seq2seq')
+    writer = SummaryWriter(log_dir=f'./run/seq2seq{"-attention" if args.use_attention else ""}')
 
     # Train and validate.
     best_valid_loss = 1000.0
@@ -47,7 +47,7 @@ def main(args):
 
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
-            torch.save(model.state_dict(), './seq2seq-model.pt')
+            torch.save(model.state_dict(), f'./seq2seq{"-attention" if args.use_attention else ""}-model.pt')
 
 
 def load_dataloader(dataset_path, batch_size=1, shuffle=False,
@@ -99,6 +99,8 @@ def parse_args():
     parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--num-workers', type=int, default=4)
     
+    parser.add_argument('--use-attention', action='store_true')
+
     parser.add_argument('--lr', type=float, default=1e-4, help='learning rate')
     parser.add_argument('--pos-weight', type=float, default=4.995, help='weight of postive samples in BCELoss')
 
