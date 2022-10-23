@@ -29,11 +29,11 @@ class Seq2SeqEncoder(nn.Module):
 
     def forward(self, x):
         x = self.embed(x)
-        _, h = self.gru(x)
+        x, h = self.gru(x)
         h = torch.reshape(torch.permute(h[-2:, :, :], (1, 0, 2)), (x.size(0), -1))
-        x = self.linear(h)
-        x = self.tanh(x)
-        return x
+        h = self.linear(h)
+        h = self.tanh(x)
+        return x, h
 
 
 class Seq2SeqDecoder(nn.Module):
@@ -59,7 +59,8 @@ class Seq2SeqModel(nn.Module):
         self.decoder = Seq2SeqDecoder(embeddings, padding_idx, embedding_size, hidden_size, batch_first)
 
     def forward(self, x, y):
-        context = self.encoder(x).unsqueeze(0)  # [1, bs, h]
+        _, context = self.encoder(x)
+        context = context.unsqueeze(0)
         x, _ = self.decoder(y, context)
         return x
 

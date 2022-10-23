@@ -32,7 +32,8 @@ def main(args):
             identifier = batch['id']
 
             prediction = []
-            hidden = model.encoder(x).unsqueeze(0)  # Inference context vector.
+            _, hidden = model.encoder(x)
+            hidden = hidden.unsqueeze(0)  # Inference context vector.
             output = torch.tensor([[1]], device=device).repeat(x.size(0), 1)  # Start predicting with <s> token.
             for i in range(min(80, x.size(1))):  # Summarize the document by at most 80 words.
                 output, hidden = model.decoder(output, hidden)
