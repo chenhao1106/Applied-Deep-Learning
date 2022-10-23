@@ -95,7 +95,6 @@ def valid(model, loader, criterion, device):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('embedding_path', type=Path, help='path to the file which stores the embeddings')
     parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--num-workers', type=int, default=4)
     
