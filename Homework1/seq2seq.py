@@ -21,8 +21,8 @@ def main(args):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # Set up model.
-    model = Seq2SeqModel(embeddings)
-    model.load_state_dict(torch.load('./seq2seq-model.pt', map_location=device))
+    model = Seq2SeqModel(embeddings, use_attention=args.use_attention)
+    model.load_state_dict(torch.load('./seq2seq{"-attention" if args.use_attention else ""}-model.pt', map_location=device))
     model.to(device)
     model.eval()
 
@@ -32,11 +32,11 @@ def main(args):
             identifier = batch['id']
 
             prediction = []
-            _, hidden = model.encoder(x)
+            encoder_outputs, hidden = model.encoder(x)
             hidden = hidden.unsqueeze(0)  # Inference context vector.
             output = torch.tensor([[1]], device=device).repeat(x.size(0), 1)  # Start predicting with <s> token.
             for i in range(min(80, x.size(1))):  # Summarize the document by at most 80 words.
-                output, hidden = model.decoder(output, hidden)
+                output, hidden = model.decoder(output, hidden, encoder_outputs)
                 output = torch.argmax(output, dim=2)
                 prediction.append(output)
             prediction = torch.cat(prediction, 1)
@@ -59,6 +59,8 @@ def load_dataloader(dataset_path, batch_size=1, shuffle=False,
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output-file', type=Path, default='./seq2seq-output.jsonl')
+
+    parser.add_argument('--use-attention', action='store_true')
 
     parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--num-workers', type=int, default=4)
