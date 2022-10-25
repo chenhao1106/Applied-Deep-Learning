@@ -13,19 +13,19 @@ $ python3 -m spacy download en_core_web_sm
 ```
 
 #### Preprocess
-```python
+```shell
 $ python3 preprocess.py /path/to/embedding-file(e.g. GloVe)
 ```
 
 #### Train models
-```python
+```shell
 $ python3 train_seq_tag.py
 $ python3 train_seq2seq.py
 $ python3 train_seq2seq.py --use-attention
 ```
 
 #### Inference
-```python
+```shell
 $ python3 extractive.py
 $ python3 seq2seq.py
 $ python3 seq2seq.py --use-attention

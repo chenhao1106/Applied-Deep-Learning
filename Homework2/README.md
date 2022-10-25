@@ -9,17 +9,17 @@ $ pip3 install -r requirements.txt
 ```
 
 #### Preprocess
-```python
+```shell
 $ python3 preprocess.py
 ```
 
 #### Train models
-```python
+```shell
 $ python3 train.py
 ```
 
 #### Inference
-```python
+```shell
 $ python3 prediction.py
 ```
 
