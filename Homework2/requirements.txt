@@ -1,5 +1,5 @@
 spacy==3.4.2
 -i https://download.pytorch.org/whl/cu113
-torch=1.12.0
-transformer=4.23.1
+torch==1.12.0
+transformer==4.23.1
 tqdm
